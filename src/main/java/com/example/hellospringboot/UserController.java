@@ -2,50 +2,43 @@ package com.example.hellospringboot;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.Optional;
 import jakarta.validation.Valid;
-
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     // CREATE a new user
     @PostMapping
-    public User createUser(@RequestBody @Valid User user) {
-        return userRepository.save(user);
+    public UserDto createUser(@RequestBody @Valid UserDto userDto) {
+        return userService.createUser(userDto);
     }
 
     // READ all users
     @GetMapping
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDto> getAllUsers() {
+        return userService.getAllUsers();
     }
 
     // READ one user by ID
     @GetMapping("/{id}")
-    public Optional<User> getUserById(@PathVariable Long id) {
-        return userRepository.findById(id);
+    public UserDto getUserById(@PathVariable Long id) {
+        return userService.getUserById(id);
     }
 
     // UPDATE a user
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody @Valid User userDetails) {
-        User user = userRepository.findById(id).orElseThrow();
-        user.setName(userDetails.getName());
-        user.setEmail(userDetails.getEmail());
-        return userRepository.save(user);
+    public UserDto updateUser(@PathVariable Long id, @RequestBody @Valid UserDto userDto) {
+        return userService.updateUser(id, userDto);
     }
-
 
     // DELETE a user
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id) {
-        userRepository.deleteById(id);
+        userService.deleteUser(id);
     }
 }
