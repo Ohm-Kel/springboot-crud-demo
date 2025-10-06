@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import jakarta.validation.Valid;
+
 
 @RestController
 @RequestMapping("/users")
@@ -15,7 +17,7 @@ public class UserController {
 
     // CREATE a new user
     @PostMapping
-    public User createUser(@RequestBody User user) {
+    public User createUser(@RequestBody @Valid User user) {
         return userRepository.save(user);
     }
 
@@ -33,12 +35,13 @@ public class UserController {
 
     // UPDATE a user
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User userDetails) {
+    public User updateUser(@PathVariable Long id, @RequestBody @Valid User userDetails) {
         User user = userRepository.findById(id).orElseThrow();
         user.setName(userDetails.getName());
         user.setEmail(userDetails.getEmail());
         return userRepository.save(user);
     }
+
 
     // DELETE a user
     @DeleteMapping("/{id}")
